@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { BaseChartDirective, Color, Label } from 'ng2-charts';
+import { ChartDataset, ChartOptions, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-line-chart',
@@ -15,14 +15,14 @@ export class LineChartComponent implements OnInit, OnChanges {
   @Input()
   heartRateDataDates: string[] = []
 
-  public lineChartData: ChartDataSets[] = [
+  public lineChartData: ChartDataset[] = [
     { data: this.heartRateData, label: 'Heart Rate' },
   ];
-  public lineChartLabels: Label[] = this.heartRateDataDates;
+  public lineChartLabels = this.heartRateDataDates;
   public lineChartOptions: ChartOptions = {
     responsive: true,
   };
-  public lineChartColors: Color[] = [
+  public lineChartColors = [
     {
       borderColor: 'black',
       backgroundColor: 'rgba(255,0,0,0.3)',
