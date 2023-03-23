@@ -7,18 +7,18 @@ import { BaseChartDirective } from 'ng2-charts';
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css']
 })
-export class LineChartComponent implements OnInit, OnChanges {
+export class LineChartComponent implements OnChanges {
 
   @Input()
-  heartRateData: number[] = [];
+  heartRateNumbers: number[] = [];
 
   @Input()
-  heartRateDataDates: string[] = []
+  heartRateDates: string[] = []
 
   public lineChartData: ChartDataset[] = [
-    { data: this.heartRateData, label: 'Heart Rate' },
+    { data: this.heartRateNumbers, label: 'Heart Rate' },
   ];
-  public lineChartLabels = this.heartRateDataDates;
+  public lineChartLabels: string[] = this.heartRateDates;
   public lineChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -36,20 +36,12 @@ export class LineChartComponent implements OnInit, OnChanges {
   chart!: BaseChartDirective;
   constructor() { }
 
-  ngOnInit() {
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    if (changes.heartRateData) {
+    if (changes.heartRateData || changes.heartRateDates) {
       this.lineChartData = [
-        { data: this.heartRateData, label: 'Heart Rate' },
+        { data: this.heartRateNumbers, label: 'Heart Rate' },
       ]
-      this.chart.update();
-    }
-    if (changes.heartRateDataDates) {
-      this.lineChartLabels = this.heartRateDataDates;
-      console.log(this.lineChartLabels);
+      this.lineChartLabels = this.heartRateDates;
       this.chart.update();
     }
   }
