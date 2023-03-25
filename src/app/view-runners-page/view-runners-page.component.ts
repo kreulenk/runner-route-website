@@ -11,9 +11,11 @@ export class ViewRunnersPageComponent implements OnInit {
 
   currentHeartRateDate: string = '';
 
-  heartRateNumbers: number[] = []
+  heartRateNumbers: number[] = [];
 
-  heartRateDates: string[] = []
+  heartRateDates: string[] = [];
+
+  siteUserCount: number = 0;
 
   ngOnInit() {
     this.setupWebSocketSubscription();
@@ -24,23 +26,18 @@ export class ViewRunnersPageComponent implements OnInit {
     subject.subscribe(
        (heartRateData: any) => {
          if (heartRateData.Records) {
+          console.log(heartRateData.Records);
           this.currentHeartRate = parseInt(heartRateData.Records[0].dynamodb.NewImage.heartRate.N);
           this.currentHeartRateDate = new Date(parseInt(heartRateData.Records[0].dynamodb.NewImage.timestamp.N)).toLocaleTimeString();
           this.heartRateNumbers = [...this.heartRateNumbers, this.currentHeartRate];
-          this.heartRateDates = [...this.heartRateDates, this.currentHeartRateDate]
+          this.heartRateDates = [...this.heartRateDates, this.currentHeartRateDate];
          }
+         if (heartRateData.userCount) this.siteUserCount = heartRateData.userCount;
        },
        (err) => console.log(err),
        () => console.log('complete')
      );
     subject.next(JSON.stringify({ op: 'hello' }));
-  }
-
-  colorSelector(heartRate: number): string {
-    if (heartRate >= 110) return 'red';
-    else if (heartRate >= 80 && heartRate < 110) return '#f5e076';
-    else if (heartRate < 80 && heartRate > 0) return 'green';
-    return 'black'
   }
 
 }

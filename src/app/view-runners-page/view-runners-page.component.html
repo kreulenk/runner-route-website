@@ -1,6 +1,23 @@
 <div id="view-runners-page">
-    <app-line-chart
-    [heartRateNumbers]="heartRateNumbers"
-    [heartRateDates]="heartRateDates"
-    ></app-line-chart>
+    <div id="all-data-view-div">
+        <div id="data-viz-div">
+            <div id="line-chart-div">
+                <app-line-chart height="500px"
+                    [heartRateNumbers]="heartRateNumbers"
+                    [heartRateDates]="heartRateDates">
+                </app-line-chart>
+            </div>
+            <div id="display-map-div">
+                <app-display-map>
+                </app-display-map>
+            </div>
+        </div>
+        <div id="user-list-div">
+            <app-user-list>
+            </app-user-list>
+                <div id="site-user-count-div">
+                    SiteWide User Count: {{ siteUserCount }}
+                </div>
+        </div>
+    </div>
 </div>

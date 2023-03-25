@@ -21,6 +21,8 @@ export class LineChartComponent implements OnChanges {
   public lineChartLabels: string[] = this.heartRateDates;
   public lineChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
+    animation: false
   };
   public lineChartColors = [
     {
