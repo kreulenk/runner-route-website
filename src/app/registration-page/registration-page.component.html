@@ -1,0 +1,33 @@
+<div id="registration-page-centered-items">
+  <div id="text-info">
+    <h1 id="title-message">Registration</h1>
+    <p id="description-message">Please fill out the required information so that you can get started on TeamXc</p>
+  </div>
+  <div id="registration-fields">
+    <mat-form-field>
+      <div id="display-name-field-contents">
+        <mat-label class="input-label">Display Name</mat-label>
+        <input matInput type="string" [(ngModel)]="displayName">
+      </div>
+    </mat-form-field>
+    <mat-form-field>
+      <div>
+        <mat-label class="input-label">Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email">
+      </div>
+    </mat-form-field>
+    <mat-form-field>
+      <div>
+        <mat-label class="input-label">Password</mat-label>
+        <input matInput type="firstPassword" [(ngModel)]="firstPassword">
+      </div>
+    </mat-form-field>
+    <mat-form-field>
+      <div>
+        <mat-label class="input-label">Confirm Password</mat-label>
+        <input matInput type="secondPassword" [(ngModel)]="secondPassword">
+      </div>
+    </mat-form-field>
+    <button mat-raised-button color="primary">Sign Up</button>
+  </div>
+</div>

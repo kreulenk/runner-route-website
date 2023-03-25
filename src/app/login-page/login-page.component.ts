@@ -9,9 +9,10 @@ import { Router } from '@angular/router';
 export class LoginPageComponent {
   constructor(private router: Router) {}
 
-  public groupNumber = '';
+  email = '';
+  password = '';
 
   onEnter(): void {
-    this.router.navigate(['/view-runners'], { queryParams: { groupNumber: this.groupNumber }});
+    this.router.navigate(['/view-runners'], { queryParams: { email: this.email }});
   }
 }

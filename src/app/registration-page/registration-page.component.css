@@ -3,12 +3,12 @@
 }
 
 #description-message {
-    margin-top: 30px;
+    margin-top: 50px;
     font-size: 18px;
 }
 
 
-#login-page-centered-items {
+#registration-page-centered-items {
     display: table;
     margin-right: auto;
     margin-left: auto;
@@ -20,15 +20,15 @@
 
 }
 
-#login-fields {
-    margin-top: 100px;
+#registration-fields {
+    margin-top: 50px;
     margin-right: auto;
     margin-left: auto;
     display: grid;
     width: 600px;
 }
 
-#email-field-contents {
+#display-name-field-contents {
     grid-column: 1;
     grid-row: 1;
 }
@@ -41,8 +41,4 @@ mat-label {
     position: relative;
     text-align: center;
     display: block;
-}
-
-#registration-info {
-    text-align: center;
 }

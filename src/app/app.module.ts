@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { UserListComponent } from './user-list/user-list.component';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { DisplayMapComponent } from './display-map/display-map.component';
+import { RegistrationPageComponent } from './registration-page/registration-page.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { DisplayMapComponent } from './display-map/display-map.component';
     LoginPageComponent,
     ViewRunnersPageComponent,
     UserListComponent,
-    DisplayMapComponent
+    DisplayMapComponent,
+    RegistrationPageComponent
   ],
   imports: [
     BrowserModule,
