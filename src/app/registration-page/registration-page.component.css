@@ -1,9 +1,9 @@
 #title-message {
     font-size: 72px;
+    margin-bottom: 50px;
 }
 
-#description-message {
-    margin-top: 50px;
+.description-message {
     font-size: 18px;
 }
 

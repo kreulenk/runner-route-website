@@ -17,6 +17,8 @@ import { UserListComponent } from './user-list/user-list.component';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { DisplayMapComponent } from './display-map/display-map.component';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -39,11 +41,14 @@ import { RegistrationPageComponent } from './registration-page/registration-page
     FormsModule,
     MatButtonModule,
     MatTableModule,
+    MatSnackBarModule,
     NgxMapboxGLModule.withConfig({
       accessToken: 'pk.eyJ1Ijoia2V2ZWFnbGU1IiwiYSI6ImNsZm5ha2dndjBhOWUzcXB0Zjh3ZXV4cDYifQ.CCW819lbKrXm1NCEdqoGaw',
     })
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 }}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
