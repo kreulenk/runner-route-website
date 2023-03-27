@@ -1,0 +1,43 @@
+#title-message {
+    font-size: 72px;
+    margin-bottom: 50px;
+}
+
+.description-message {
+    font-size: 18px;
+}
+
+#all-centered-items {
+    display: table;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#text-info {
+    text-align: center;
+    margin-top: 300px;
+
+}
+
+#registration-fields {
+    margin-top: 50px;
+    margin-right: auto;
+    margin-left: auto;
+    display: grid;
+    width: 600px;
+}
+
+#display-name-field-contents {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+input {
+    text-align: center;
+}
+
+mat-label {
+    position: relative;
+    text-align: center;
+    display: block;
+}

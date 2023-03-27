@@ -1,0 +1,21 @@
+<div id="all-centered-items">
+  <div id="text-info">
+    <h1 id="title-message">Confirm Registration</h1>
+    <p class="description-message">Please enter your email and registration token to confirm your account.</p>
+  </div>
+  <div id="registration-fields">
+  	<mat-form-field>
+      <div id="display-name-field-contents">
+        <mat-label class="input-label">Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email">
+      </div>
+    </mat-form-field>
+    <mat-form-field>
+      <div id="display-name-field-contents">
+        <mat-label class="input-label">Confirmation Code</mat-label>
+        <input matInput type="password" [(ngModel)]="confirmationCode">
+      </div>
+    </mat-form-field>
+    <button (click)="confirmRegistration()" mat-raised-button color="primary">Confirm Registration</button>
+  </div>
+</div>

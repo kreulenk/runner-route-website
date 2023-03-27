@@ -17,6 +17,18 @@
         <input matInput type="email" [(ngModel)]="email">
       </div>
     </mat-form-field>
+    <mat-form-field>
+      <div>
+        <mat-label class="input-label">Password</mat-label>
+        <input matInput type="password" [(ngModel)]="password1">
+      </div>
+    </mat-form-field>
+    <mat-form-field>
+      <div>
+        <mat-label class="input-label">Confirm Password</mat-label>
+        <input matInput type="password" [(ngModel)]="password2">
+      </div>
+    </mat-form-field>
     <button (click)="submitCredentials()" mat-raised-button color="primary">Sign Up</button>
   </div>
 </div>

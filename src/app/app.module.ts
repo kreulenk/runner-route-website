@@ -19,6 +19,8 @@ import { DisplayMapComponent } from './display-map/display-map.component';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ViewRunnersPageComponent,
     UserListComponent,
     DisplayMapComponent,
-    RegistrationPageComponent
+    RegistrationPageComponent,
+    ResetPasswordComponent,
+    ConfirmRegistrationComponent
   ],
   imports: [
     BrowserModule,
