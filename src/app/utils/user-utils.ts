@@ -1,4 +1,9 @@
+import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
+
 export default class UserUtils {
+	static CLIENT_ID: string = '41p4agtsookev17mobo88urbt';
+	static cognitoClient = new CognitoIdentityProviderClient({ region: "us-east-1" });
+
 	/*
 		Returns a message with how a password lacks complexity per the rules defined by the Cognito User pool. If there are no issues, false is returned
 	*/
