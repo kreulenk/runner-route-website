@@ -21,7 +21,7 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
-import { ViewLiveMapComponent } from './view-live-map/view-live-map.component';
+import { ViewLiveMapComponent } from './view-live-map/view-live-map-page.component';
 
 @NgModule({
   declarations: [

@@ -28,9 +28,9 @@ type UserDataCollection = {
 }
 
 @Component({
-  selector: 'app-view-live-map',
-  templateUrl: './view-live-map.component.html',
-  styleUrls: ['./view-live-map.component.css']
+  selector: 'app-view-live-map-page',
+  templateUrl: './view-live-map-page.component.html',
+  styleUrls: ['./view-live-map-page.component.css']
 })
 export class ViewLiveMapComponent implements AfterViewInit {
   private allUsersData: UserDataCollection = {};
@@ -125,7 +125,7 @@ export class ViewLiveMapComponent implements AfterViewInit {
     var zoom: any = d3.zoom()
       .scaleExtent([0.5, 2])
       .extent([[0, 0], [this.pageWidth, this.pageHeight]])
-      .translateExtent([[0, 0], [this.pageWidth * 2, this.pageHeight * 2]] )
+      .translateExtent([[-this.pageWidth, -this.pageHeight], [this.pageWidth * 2, this.pageHeight * 2]] )
       .on('zoom', (e) => this.updatePerZoom(e));
 
     d3.select("div#bar")

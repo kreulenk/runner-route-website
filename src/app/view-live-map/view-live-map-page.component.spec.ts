@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewLiveMapComponent } from './view-live-map.component';
+import { ViewLiveMapComponent } from './view-live-map-page.component';
 
 describe('ViewLiveMapComponent', () => {
   let component: ViewLiveMapComponent;
