@@ -36,8 +36,10 @@ export class ViewLiveMapComponent implements AfterViewInit {
   private allUsersData: UserDataCollection = {};
   private svg: any;
   private xScale: any;
+  private currentXScale: any;
   private xAxis: any;
   private yScale: any;
+  private currentYScale: any;
   private yAxis: any;
   private svgPaths: any;
   private pageWidth: number = window.innerWidth * .99;
@@ -98,7 +100,7 @@ export class ViewLiveMapComponent implements AfterViewInit {
       .append("svg")
       .attr("width", this.pageWidth)
       .attr("height", this.pageHeight)
-      .append("g");
+      // .append("g")
 
     // Create the X-axis band scale
     this.xScale = d3.scaleLinear()
@@ -126,17 +128,16 @@ export class ViewLiveMapComponent implements AfterViewInit {
       .on('zoom', (e) => this.updatePerZoom(e));
 
     d3.select("div#bar")
-      .style('scroll-events', 'zoom')
       .call(zoom);
   }
 
   private updatePerZoom(event: any) {
     // Update the scales
-    this.xScale = event.transform.rescaleX(this.xScale);
-    this.yScale = event.transform.rescaleY(this.yScale)
+    this.currentXScale = event.transform.rescaleX(this.xScale);
+    this.currentYScale = event.transform.rescaleY(this.yScale);
     // Update the axes
-    this.xAxis.call(d3.axisBottom(this.xScale));
-    this.yAxis.call(d3.axisLeft(this.yScale));
+    this.xAxis.call(d3.axisBottom(this.currentXScale))
+    this.yAxis.call(d3.axisLeft(this.currentYScale))
 
     this.plotUserLines();
   }
@@ -159,8 +160,8 @@ export class ViewLiveMapComponent implements AfterViewInit {
       this.svg.select("#" + value.username)
         .datum(value.dataToPlot)
         .attr("d", d3.line()
-          .x((d: any) => this.xScale(d.adjustedLatitude))
-          .y((d: any) => this.yScale(d.adjustedLongitude))
+          .x((d: any) => this.currentXScale(d.adjustedLatitude))
+          .y((d: any) => this.currentYScale(d.adjustedLongitude))
         );
     }
   }
