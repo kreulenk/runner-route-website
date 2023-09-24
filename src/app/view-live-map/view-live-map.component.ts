@@ -13,7 +13,8 @@ type UserData = {
   initialLatitude: number,
   initialLongitude: number,
   lineColor: string,
-  dataToPlot: PlottableData[]
+  dataToPlot: PlottableData[],
+  username: string
 }
 
 type PlottableData = {
@@ -63,22 +64,32 @@ export class ViewLiveMapComponent implements AfterViewInit {
     subject.next(JSON.stringify({ op: 'hello' }));
   }
 
-  private addDataPoint(dataPoint: AWSDataPoint): void {
-    if (!this.allUsersData[dataPoint.username]) { // If the user's data does not exist we will create a entry point for their data with a zero'd coordinate set
-      const initialLatitude = dataPoint.latitude;
-      const initialLongitude = dataPoint.longitude;
+  private addDataPoint(awsDataPoint: AWSDataPoint): void {
+    let isNewUser = false;
+    const usernameNoSpaces = awsDataPoint.username.replace(/\s|\)|\(/g, "_")
+    if (!this.allUsersData[usernameNoSpaces]) { // If the user's data does not exist we will create a entry point for their data with a zero'd coordinate set
+      isNewUser = true;
+      const initialLatitude = awsDataPoint.latitude;
+      const initialLongitude = awsDataPoint.longitude;
       const lineColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // Randomly generate a color that will be used for this user's line
 
-      this.allUsersData[dataPoint.username] = { initialLatitude, initialLongitude, dataToPlot: [], lineColor }
+      this.allUsersData[usernameNoSpaces] = { initialLatitude, initialLongitude, dataToPlot: [], lineColor, username: usernameNoSpaces }
     }
 
-    const latitudeDifferenceFromInitial = (Math.abs(this.allUsersData[dataPoint.username].initialLatitude) - Math.abs(dataPoint.latitude));
-    const longitudeDifferenceFromInitial = (Math.abs(this.allUsersData[dataPoint.username].initialLongitude) - Math.abs(dataPoint.longitude));
+    const latitudeDifferenceFromInitial = (Math.abs(this.allUsersData[usernameNoSpaces].initialLatitude) - Math.abs(awsDataPoint.latitude));
+    const longitudeDifferenceFromInitial = (Math.abs(this.allUsersData[usernameNoSpaces].initialLongitude) - Math.abs(awsDataPoint.longitude));
     const adjustedLatitude = latitudeDifferenceFromInitial * 68.96139; // 1 degree of latitude change is 68 miles
     const adjustedLongitude = longitudeDifferenceFromInitial * 55.11761; // 1 degree of longitude is 54 miles
-    this.allUsersData[dataPoint.username].dataToPlot.push({ adjustedLatitude, adjustedLongitude, heartRate: dataPoint.heartRate });
-    console.log(this.allUsersData[dataPoint.username]);
-    this.drawBars();
+
+    const newPlottableData: PlottableData = { adjustedLatitude, adjustedLongitude, heartRate: awsDataPoint.heartRate };
+
+    this.allUsersData[usernameNoSpaces].dataToPlot.push(newPlottableData);
+    if (isNewUser) {
+      this.addNewUser(this.allUsersData[usernameNoSpaces])
+    } else {
+      console.log(this.allUsersData[usernameNoSpaces]);
+      this.plotUserLines();
+    }
   }
 
 
@@ -115,7 +126,7 @@ export class ViewLiveMapComponent implements AfterViewInit {
       .on('zoom', (e) => this.updatePerZoom(e));
 
     d3.select("div#bar")
-      .style('pointer-events', 'zoom')
+      .style('scroll-events', 'zoom')
       .call(zoom);
   }
 
@@ -127,20 +138,26 @@ export class ViewLiveMapComponent implements AfterViewInit {
     this.xAxis.call(d3.axisBottom(this.xScale));
     this.yAxis.call(d3.axisLeft(this.yScale));
 
-    this.svgPaths.selectAll("path")
+    this.plotUserLines();
+  }
+
+  private addNewUser(userData: UserData): void {
+    this.svgPaths = this.svg.append("path")
+      .datum(userData.dataToPlot)
+      .attr("fill", "none")
+      .attr("stroke", userData.lineColor)
+      .attr("id", userData.username)
+      .attr("stroke-width", 2.5)
       .attr("d", d3.line()
         .x((d: any) => this.xScale(d.adjustedLatitude))
         .y((d: any) => this.yScale(d.adjustedLongitude))
       );
   }
 
-  private drawBars(): void {
+  private plotUserLines() {
     for (const [key, value] of Object.entries(this.allUsersData)) {
-      this.svgPaths = this.svg.append("path")
+      this.svg.select("#" + value.username)
         .datum(value.dataToPlot)
-        .attr("fill", "none")
-        .attr("stroke", value.lineColor)
-        .attr("stroke-width", 2.5)
         .attr("d", d3.line()
           .x((d: any) => this.xScale(d.adjustedLatitude))
           .y((d: any) => this.yScale(d.adjustedLongitude))
@@ -150,7 +167,6 @@ export class ViewLiveMapComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.createSvg();
-    this.drawBars();
     this.setupWebSocketSubscription();
   }
 
