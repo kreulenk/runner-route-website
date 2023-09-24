@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import * as d3 from 'd3';
 import { webSocket } from 'rxjs/webSocket';
 
@@ -31,10 +31,12 @@ type UserDataCollection = {
   templateUrl: './view-live-map.component.html',
   styleUrls: ['./view-live-map.component.css']
 })
-export class ViewLiveMapComponent implements OnInit {
+export class ViewLiveMapComponent implements AfterViewInit {
   private allUsersData: UserDataCollection = {};
   private svg: any;
+  private xScale: any;
   private xAxis: any;
+  private yScale: any;
   private yAxis: any;
   private pageWidth: number = window.innerWidth * .99;
   private pageHeight: number = window.innerHeight * .99;
@@ -44,11 +46,7 @@ export class ViewLiveMapComponent implements OnInit {
     let subject = webSocket('wss://vkur9pkf63.execute-api.us-east-1.amazonaws.com/production');
     subject.subscribe(
       (heartRateData: any) => {
-        let currentLatitude;
-        let currentLongitude;
         if (heartRateData.Records) {
-          currentLatitude = heartRateData.Records[0].dynamodb.NewImage.latitude.N;
-          currentLongitude = heartRateData.Records[0].dynamodb.NewImage.longitude.N
           const newDataPoint: AWSDataPoint = {
             latitude: parseFloat(heartRateData.Records[0].dynamodb.NewImage.latitude.N),
             longitude: parseFloat(heartRateData.Records[0].dynamodb.NewImage.longitude.N),
@@ -68,7 +66,7 @@ export class ViewLiveMapComponent implements OnInit {
     if (!this.allUsersData[dataPoint.username]) { // If the user's data does not exist we will create a entry point for their data with a zero'd coordinate set
       const initialLatitude = dataPoint.latitude;
       const initialLongitude = dataPoint.longitude;
-      const lineColor = '#' + Math.floor(Math.random()*16777215).toString(16); // Randomly generate a color that will be used for this user's line
+      const lineColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // Randomly generate a color that will be used for this user's line
 
       this.allUsersData[dataPoint.username] = { initialLatitude, initialLongitude, dataToPlot: [], lineColor }
     }
@@ -77,7 +75,7 @@ export class ViewLiveMapComponent implements OnInit {
     const longitudeDifferenceFromInitial = (Math.abs(this.allUsersData[dataPoint.username].initialLongitude) - Math.abs(dataPoint.longitude));
     const adjustedLatitude = latitudeDifferenceFromInitial * 68.96139; // 1 degree of latitude change is 68 miles
     const adjustedLongitude = longitudeDifferenceFromInitial * 55.11761; // 1 degree of longitude is 54 miles
-    this.allUsersData[dataPoint.username].dataToPlot.push({adjustedLatitude, adjustedLongitude, heartRate: dataPoint.heartRate });
+    this.allUsersData[dataPoint.username].dataToPlot.push({ adjustedLatitude, adjustedLongitude, heartRate: dataPoint.heartRate });
     console.log(this.allUsersData[dataPoint.username]);
     this.drawBars();
   }
@@ -88,46 +86,62 @@ export class ViewLiveMapComponent implements OnInit {
       .append("svg")
       .attr("width", this.pageWidth)
       .attr("height", this.pageHeight)
-      .append("g")
+      .append("g");
 
     // Create the X-axis band scale
-    this.xAxis = d3.scaleLinear()
+    this.xScale = d3.scaleLinear()
       .range([0, this.pageWidth])
       .domain([-3, 3]);
 
     // Draw the X-axis on the DOM
-    this.svg.append("g")
+    this.xAxis = this.svg.append("g")
       .attr("transform", "translate(" + 0 + "," + this.pageHeight / 2 + ")")
-      .call(d3.axisBottom(this.xAxis));
+      .call(d3.axisBottom(this.xScale));
 
     // Create the Y-axis band scale
-    this.yAxis = d3.scaleLinear()
+    this.yScale = d3.scaleLinear()
       .range([0, this.pageHeight])
       .domain([3, -3]);
 
     // Draw the Y-axis on the DOM
-    this.svg.append("g")
+    this.yAxis = this.svg.append("g")
       .attr("transform", "translate(" + this.pageWidth / 2 + "," + 0 + ")")
-      .call(d3.axisLeft(this.yAxis));
+      .call(d3.axisLeft(this.yScale));
+
+    var zoom: any = d3.zoom()
+      .scaleExtent([0.5, 2])
+      .extent([[0, 0], [this.pageWidth, this.pageHeight]])
+      .on('zoom', (e) => this.updatePerZoom(e));
+
+    d3.select("div#bar")
+      .style('pointer-events', 'all')
+      .call(zoom);
+  }
+
+  private updatePerZoom(event: any) {
+    // Update the scales
+    this.xScale = event.transform.rescaleX(this.xScale);
+    this.yScale = event.transform.rescaleY(this.yScale)
+    // Update the axes
+    this.xAxis.call(d3.axisBottom(this.xScale));
+    this.yAxis.call(d3.axisLeft(this.yScale));
   }
 
   private drawBars(): void {
     for (const [key, value] of Object.entries(this.allUsersData)) {
       this.svg.append("path")
-      .datum(value.dataToPlot)
-      .attr("fill", "none")
-      .attr("stroke", value.lineColor)
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x((d: any) => this.xAxis(d.adjustedLatitude))
-        .y((d: any) => this.yAxis(d.adjustedLongitude))
-      );
+        .datum(value.dataToPlot)
+        .attr("fill", "none")
+        .attr("stroke", value.lineColor)
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+          .x((d: any) => this.xScale(d.adjustedLatitude))
+          .y((d: any) => this.yScale(d.adjustedLongitude))
+        );
     }
-
-
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.createSvg();
     this.drawBars();
     this.setupWebSocketSubscription();
