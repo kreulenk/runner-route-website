@@ -38,6 +38,7 @@ export class ViewLiveMapComponent implements AfterViewInit {
   private xAxis: any;
   private yScale: any;
   private yAxis: any;
+  private svgPaths: any;
   private pageWidth: number = window.innerWidth * .99;
   private pageHeight: number = window.innerHeight * .99;
 
@@ -114,7 +115,7 @@ export class ViewLiveMapComponent implements AfterViewInit {
       .on('zoom', (e) => this.updatePerZoom(e));
 
     d3.select("div#bar")
-      .style('pointer-events', 'all')
+      .style('pointer-events', 'zoom')
       .call(zoom);
   }
 
@@ -125,15 +126,21 @@ export class ViewLiveMapComponent implements AfterViewInit {
     // Update the axes
     this.xAxis.call(d3.axisBottom(this.xScale));
     this.yAxis.call(d3.axisLeft(this.yScale));
+
+    this.svgPaths.selectAll("path")
+      .attr("d", d3.line()
+        .x((d: any) => this.xScale(d.adjustedLatitude))
+        .y((d: any) => this.yScale(d.adjustedLongitude))
+      );
   }
 
   private drawBars(): void {
     for (const [key, value] of Object.entries(this.allUsersData)) {
-      this.svg.append("path")
+      this.svgPaths = this.svg.append("path")
         .datum(value.dataToPlot)
         .attr("fill", "none")
         .attr("stroke", value.lineColor)
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 2.5)
         .attr("d", d3.line()
           .x((d: any) => this.xScale(d.adjustedLatitude))
           .y((d: any) => this.yScale(d.adjustedLongitude))
