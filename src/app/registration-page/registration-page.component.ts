@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Used for toast messages
 import UserUtils from '../utils/user-utils';
-import axios from 'axios';
-
+import { Router } from '@angular/router';
+import { SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 @Component({
   selector: 'app-registration-page',
@@ -15,9 +15,9 @@ export class RegistrationPageComponent {
   password1: string = '';
   password2: string = '';
 
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(private router: Router, private _snackBar: MatSnackBar) {}
 
-  submitCredentials(): void {
+  async submitCredentials(): Promise<void> {
     const emailRegex = new RegExp(/^\S+@\S+\.\S+$/);
 
     if (this.displayName.length < 4 || this.displayName.length > 12) { // Check Display Name Length
@@ -39,15 +39,23 @@ export class RegistrationPageComponent {
       return;
     }
 
-    // Start registration API call to Lambda function
-    axios.post('https://0495i2ikqg.execute-api.us-east-1.amazonaws.com/default/registerNewUser', {
-      email: this.email,
-      displayName: this.displayName,
-      password: this.password1
-    }).then((res: any) => {
-      this._snackBar.open('Your user has been created! Please check your email to reset your password.');
-    }).catch((err: any) => {
-      this._snackBar.open('There was an error creating your user');
-    });
+    const newUserParams = {
+      ClientId: UserUtils.CLIENT_ID,
+      Username: this.email,
+      Password: this.password1,
+      UserAttributes: [{ Name: "email", Value: this.email}, { Name: "preferred_username", Value: this.displayName }]
+    };
+    
+    let response;
+    try {
+      const command = new SignUpCommand(newUserParams);
+      response = await UserUtils.cognitoClient.send(command);
+      this._snackBar.open('Your user has been created! Please check your email to complete the registration.');
+      this.router.navigate(['confirm-registration'])
+    } catch(err) {
+      console.log(err);
+      this._snackBar.open(`There was an error creating your user: ${err}`);
+    }
+    
   }
 }

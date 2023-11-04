@@ -26,7 +26,7 @@ export class LiveMapComponent implements AfterViewInit {
     this.svg = d3.select("div#bar")
       .append("svg")
       .attr("width", this.pageWidth)
-      .attr("height", this.pageHeight)
+      .attr("height", this.pageHeight - 60)
 
     // Create the X-axis band scale
     this.originalXScale = d3.scaleLinear()
@@ -95,22 +95,22 @@ export class LiveMapComponent implements AfterViewInit {
       .style("padding", "5px")
       .style("position", "fixed")
 
-    let mouseover: any = (event: any) => {
+    let mouseover: any = () => {
       d3.select("path#" + userData.username)
-        .attr("stroke-width", 6)
+        .attr("stroke-width", 5)
 
       Tooltip
         .style("opacity", 1)
-        .html("test")
-        .style("left", event.x + 5 + "px")
-        .style("top", event.y + 5 + "px")
     }
-    let mousemove:any = (event: any) => {
+
+    let mousemove:any = (event: any, pathData: any) => {
+      const username = event.target.attributes.id.value;
       Tooltip
-        .html("test")
+        .html("User: " + username + "<br>Heart Rate: " + pathData[pathData.length - 1].heartRate)
         .style("left", event.x + 5 + "px")
         .style("top", event.y + 5 +"px")
     }
+
     let mouseout: any = () => {
       d3.select("path#" + userData.username)
         .attr("stroke-width", 2.5)

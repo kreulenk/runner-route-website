@@ -23,6 +23,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
 import { ViewLiveMapPageComponent } from './view-live-map-page/view-live-map-page.component';
 import { LiveMapComponent } from './live-map/live-map.component';
+import { UserBarComponent } from './user-bar/user-bar.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LiveMapComponent } from './live-map/live-map.component';
     ResetPasswordComponent,
     ConfirmRegistrationComponent,
     ViewLiveMapPageComponent,
-    LiveMapComponent
+    LiveMapComponent,
+    UserBarComponent
   ],
   imports: [
     BrowserModule,
