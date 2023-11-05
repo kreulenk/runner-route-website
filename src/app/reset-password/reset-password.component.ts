@@ -8,10 +8,10 @@ import UserUtils from '../utils/user-utils';
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent {
-  email:string = '';
-  resetToken:string = '';
-  newPassword1:string = '';
-  newPassword2:string = '';
+  email = '';
+  resetToken = '';
+  newPassword1 = '';
+  newPassword2 = '';
 
   constructor(private _snackBar: MatSnackBar) {}
 

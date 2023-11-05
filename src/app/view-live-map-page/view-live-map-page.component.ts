@@ -15,7 +15,7 @@ export class ViewLiveMapPageComponent implements AfterViewInit {
   child: LiveMapComponent = new LiveMapComponent;
 
   setupWebSocketSubscription() {
-    let subject = webSocket('wss://vkur9pkf63.execute-api.us-east-1.amazonaws.com/production');
+    const subject = webSocket('wss://vkur9pkf63.execute-api.us-east-1.amazonaws.com/production');
     subject.subscribe(
       (heartRateData: any) => {
         if (heartRateData.Records) {

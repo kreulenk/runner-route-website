@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import UserUtils from '../utils/user-utils';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Used for toast messages
-import { InitiateAuthCommand, GetUserCommand } from "@aws-sdk/client-cognito-identity-provider";
+import { InitiateAuthCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 @Component({
   selector: 'app-login-page',

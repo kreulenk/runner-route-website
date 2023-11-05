@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Used for toast messages
 import UserUtils from '../utils/user-utils';
 import { Router } from '@angular/router';
@@ -10,10 +10,10 @@ import { SignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
   styleUrls: ['./registration-page.component.css']
 })
 export class RegistrationPageComponent {
-  displayName: string = '';
-  email: string = '';
-  password1: string = '';
-  password2: string = '';
+  displayName = '';
+  email = '';
+  password1 = '';
+  password2 = '';
 
   constructor(private router: Router, private _snackBar: MatSnackBar) {}
 
@@ -46,10 +46,8 @@ export class RegistrationPageComponent {
       UserAttributes: [{ Name: "email", Value: this.email}, { Name: "preferred_username", Value: this.displayName }]
     };
     
-    let response;
     try {
-      const command = new SignUpCommand(newUserParams);
-      response = await UserUtils.cognitoClient.send(command);
+      await UserUtils.cognitoClient.send(new SignUpCommand(newUserParams));
       this._snackBar.open('Your user has been created! Please check your email to complete the registration.');
       this.router.navigate(['confirm-registration'])
     } catch(err) {

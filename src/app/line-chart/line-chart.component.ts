@@ -36,7 +36,6 @@ export class LineChartComponent implements OnChanges {
 
   @ViewChild(BaseChartDirective, { static: true })
   chart!: BaseChartDirective;
-  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.heartRateData || changes.heartRateDates) {

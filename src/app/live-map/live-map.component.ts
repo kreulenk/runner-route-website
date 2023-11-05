@@ -50,7 +50,7 @@ export class LiveMapComponent implements AfterViewInit {
       .attr("transform", "translate(" + this.pageWidth / 2 + "," + 0 + ")")
       .call(d3.axisLeft(this.originalYScale));
 
-    let zoom: any = d3.zoom()
+    const zoom: any = d3.zoom()
       .scaleExtent([0.5, 2])
       .extent([[0, 0], [this.pageWidth, this.pageHeight]])
       .translateExtent([[-this.pageWidth, -this.pageHeight], [this.pageWidth * 2, this.pageHeight * 2]])
@@ -84,7 +84,7 @@ export class LiveMapComponent implements AfterViewInit {
         .y((d: any) => this.currentYScale(d.adjustedLongitude))
       );
 
-    let Tooltip = d3.select("div#bar")
+    const Tooltip = d3.select("div#bar")
       .append("div")
       .style("opacity", 0)
       .attr("class", "tooltip")
@@ -95,7 +95,7 @@ export class LiveMapComponent implements AfterViewInit {
       .style("padding", "5px")
       .style("position", "fixed")
 
-    let mouseover: any = () => {
+    const mouseover: any = () => {
       d3.select("path#" + userData.username)
         .attr("stroke-width", 5)
 
@@ -103,7 +103,7 @@ export class LiveMapComponent implements AfterViewInit {
         .style("opacity", 1)
     }
 
-    let mousemove:any = (event: any, pathData: any) => {
+    const mousemove:any = (event: any, pathData: any) => {
       const username = event.target.attributes.id.value;
       Tooltip
         .html("User: " + username + "<br>Heart Rate: " + pathData[pathData.length - 1].heartRate)
@@ -111,7 +111,7 @@ export class LiveMapComponent implements AfterViewInit {
         .style("top", event.y + 5 +"px")
     }
 
-    let mouseout: any = () => {
+    const mouseout: any = () => {
       d3.select("path#" + userData.username)
         .attr("stroke-width", 2.5)
 
