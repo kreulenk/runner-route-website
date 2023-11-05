@@ -19,7 +19,7 @@ export class LoginPageComponent implements OnInit {
     localStorage.clear();
   }
 
-  async onEnter(): Promise<void> {
+  async loginUser(): Promise<void> {
     const loginParams:any = {
       ClientId: UserUtils.CLIENT_ID,
       AuthFlow: 'USER_PASSWORD_AUTH',

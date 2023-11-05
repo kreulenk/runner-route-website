@@ -28,6 +28,10 @@
     width: 600px;
 }
 
+#login-button {
+    margin-bottom: 15px;
+}
+
 #email-field-contents {
     grid-column: 1;
     grid-row: 1;
