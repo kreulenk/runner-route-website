@@ -20,7 +20,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   async onEnter(): Promise<void> {
-    const loginParams = {
+    const loginParams:any = {
       ClientId: UserUtils.CLIENT_ID,
       AuthFlow: 'USER_PASSWORD_AUTH',
       AuthParameters: {
