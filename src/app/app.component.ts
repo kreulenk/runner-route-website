@@ -11,18 +11,24 @@ export class AppComponent implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
   // If we load into the site on a random page, check if we are logged in
-  ngOnInit(): void {
-    const accessToken = localStorage.getItem('accessToken') as string;
-    if (document.location.href.includes('/confirm-registration')) return;
+  async ngOnInit(): Promise<void> {
+    // We do not need to confirm an active session on registration pages
+    const currentUrl = document.location.href;
+    if (currentUrl.includes('/confirm-registration') || currentUrl.includes('/registration')) return;
+    if (await this.isSessionActive()) return;
 
-    if (!accessToken) {
-      this.router.navigate(['']);
-      return;
-    }
+    this.router.navigate(['']);
+  }
+
+  async isSessionActive(): Promise<boolean> {
+    const accessToken = localStorage.getItem('accessToken') as string;
+    if (!accessToken) return false;
+
     try {
-      UserUtils.setUserInfo(accessToken);
+      await UserUtils.setUserInfo(accessToken);
     } catch (err) {
-      this.router.navigate(['']);
+      return false;
     }
+    return true;
   }
 }

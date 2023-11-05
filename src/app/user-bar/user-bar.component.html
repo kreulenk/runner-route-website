@@ -1,9 +1,11 @@
 <div id="user-bar">
+    <div id="title-text">runner route</div>
     <div id="user-dropdown">
         <div id="user-button" (click)="toggleUserDropdown()">
             <i id="user-icon" class='bx bx-lg bx-user'></i>
         </div>
         <div id="user-dropdown-content" *ngIf="displayUserDropdown">
+            <div class="user-dropdown-button" (click)="logoutUser()">Logout</div>
         </div>
     </div>
 </div>
