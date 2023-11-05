@@ -1,4 +1,4 @@
-import { CognitoIdentityProviderClient } from "@aws-sdk/client-cognito-identity-provider";
+import { CognitoIdentityProviderClient, GetUserCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 export default class UserUtils {
 	static CLIENT_ID: string = '41p4agtsookev17mobo88urbt';
@@ -21,4 +21,11 @@ export default class UserUtils {
 	    if (password.length < 8) return 'Your new password must be at least 8 characters in length';
 	    return false; // If no issues were found, return false
 	};
+
+	static async setUserInfo(accessToken: string) {
+		const getUserResponse = await UserUtils.cognitoClient.send(new GetUserCommand({ AccessToken: accessToken }));
+		getUserResponse.UserAttributes?.forEach(attribute => { // Set preferred username and other attrs
+		  localStorage.setItem(attribute.Name as string, attribute.Value as string);
+		});
+	}
 }

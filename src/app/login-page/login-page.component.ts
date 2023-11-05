@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import UserUtils from '../utils/user-utils';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Used for toast messages
@@ -9,11 +9,15 @@ import { InitiateAuthCommand, GetUserCommand } from "@aws-sdk/client-cognito-ide
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   constructor(private router: Router, private _snackBar: MatSnackBar) {}
 
   email = '';
   password = '';
+
+  ngOnInit(): void {
+    localStorage.clear();
+  }
 
   async onEnter(): Promise<void> {
     const loginParams = {
@@ -27,14 +31,10 @@ export class LoginPageComponent {
 
     try {
       const authResponse = await UserUtils.cognitoClient.send(new InitiateAuthCommand(loginParams));
-      const AccessToken = authResponse.AuthenticationResult?.AccessToken;
+      const accessToken = authResponse.AuthenticationResult?.AccessToken as string;
+      localStorage.setItem('accessToken', accessToken as string);
 
-      const getUserResponse = await UserUtils.cognitoClient.send(new GetUserCommand({ AccessToken }));
-
-      localStorage.setItem('access_token', AccessToken as string);
-      getUserResponse.UserAttributes?.forEach(attribute => { // Set preferred username and other attrs
-        localStorage.setItem(attribute.Name as string, attribute.Value as string);
-      });
+      UserUtils.setUserInfo(accessToken);
       this.router.navigate(['view-live-map']);
     } catch(err) {
       this._snackBar.open('There was an error logging in');
