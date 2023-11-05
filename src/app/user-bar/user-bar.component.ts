@@ -7,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserBarComponent implements OnInit {
   preferredUsername = '';
+  displayUserDropdown = false;
 
   ngOnInit(): void {
     this.preferredUsername = localStorage.getItem('preferred_username') as string;
+  }
+
+  toggleUserDropdown(): void {
+    this.displayUserDropdown = !this.displayUserDropdown;
   }
 }

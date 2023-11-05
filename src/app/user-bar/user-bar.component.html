@@ -1,3 +1,10 @@
 <div id="user-bar">
-    <div id="user-dropdown">{{ preferredUsername }}</div>
+    <div id="user-dropdown">
+        <div id="user-button" (click)="toggleUserDropdown()">
+            <i id="user-icon" class='bx bx-lg bx-user'></i>
+        </div>
+        <div id="user-dropdown-content" *ngIf="displayUserDropdown">
+            
+        </div>
+    </div>
 </div>

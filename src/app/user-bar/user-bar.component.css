@@ -4,14 +4,32 @@
     background-color: rgb(132, 178, 220);
 }
 
-#user-dropdown {
+#user-button {
     width: 80px;
     float: right;
     text-align: center;
     height: 60px;
-    line-height: 60px;
 }
 
-#user-dropdown:hover {
+#user-button:hover {
     background-color: rgb(67, 142, 213);
+}
+
+#user-icon {
+    margin-top: 5px;
+}
+
+#user-dropdown {
+  position: relative;
+  float: right;
+}
+
+#user-dropdown-content {
+    position: absolute;
+    background-color: rgb(115 155 192);
+    z-index: 1;
+    height: 300px;
+    width: 230px;
+    left: -150px;
+    margin-top: 60px;
 }
