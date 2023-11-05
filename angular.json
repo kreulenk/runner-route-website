@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "heart-tracker-website": {
+    "runner-route-website": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/heart-tracker-website",
+            "outputPath": "dist/runner-route-website",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -73,18 +73,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "heart-tracker-website:build"
+            "browserTarget": "runner-route-website:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "heart-tracker-website:build:production"
+              "browserTarget": "runner-route-website:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "heart-tracker-website:build"
+            "browserTarget": "runner-route-website:build"
           }
         },
         "test": {
@@ -109,11 +109,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "heart-tracker-website:serve"
+            "devServerTarget": "runner-route-website:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "heart-tracker-website:serve:production"
+              "devServerTarget": "runner-route-website:serve:production"
             }
           }
         }
