@@ -20,6 +20,7 @@ import { ConfirmRegistrationComponent } from './confirm-registration/confirm-reg
 import { ViewLiveMapPageComponent } from './view-live-map-page/view-live-map-page.component';
 import { LiveMapComponent } from './live-map/live-map.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { UserBarComponent } from './user-bar/user-bar.component';
     FormsModule,
     MatButtonModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    HttpClientModule
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 }}

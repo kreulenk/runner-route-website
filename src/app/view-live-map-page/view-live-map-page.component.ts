@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket';
 import { AWSDataPoint, PlottableData, UserDataCollection } from '../types/run-data-types';
 import { LiveMapComponent } from '../live-map/live-map.component';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-view-live-map-page',
@@ -9,10 +10,22 @@ import { LiveMapComponent } from '../live-map/live-map.component';
   styleUrls: ['./view-live-map-page.component.css']
 })
 export class ViewLiveMapPageComponent implements AfterViewInit {
+  constructor(private apiService: ApiService) { }
   public allUsersData: UserDataCollection = {};
 
   @ViewChild(LiveMapComponent)
   child: LiveMapComponent = new LiveMapComponent;
+
+  private getRecentData(): void {
+    this.apiService.getRecentData().subscribe({
+      next: (res: any) => {
+        res.forEach((element: { latitude: any; longitude: any; username: any; heartRate: any; }) => {
+          this.addDataPoint( {latitude: element.latitude, longitude: element.longitude, username: element.username, heartRate: element.heartRate} );
+        });
+      },
+      error: (err: any) => console.log(err)
+    });
+  }
 
   setupWebSocketSubscription() {
     const subject = webSocket('wss://vkur9pkf63.execute-api.us-east-1.amazonaws.com/production');
@@ -59,6 +72,7 @@ export class ViewLiveMapPageComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.getRecentData();
     this.setupWebSocketSubscription();
   }
 
