@@ -80,8 +80,8 @@ export class LiveMapComponent implements AfterViewInit {
       .attr("stroke", userData.lineColor)
       .attr("stroke-width", 2.5)
       .attr("d", d3.line()
-        .x((d: any) => this.currentXScale(d.adjustedLatitude))
-        .y((d: any) => this.currentYScale(d.adjustedLongitude))
+        .x((d: any) => this.currentXScale(d.latitude))
+        .y((d: any) => this.currentYScale(d.longitude))
       );
 
     const Tooltip = d3.select("div#bar")
@@ -130,8 +130,8 @@ export class LiveMapComponent implements AfterViewInit {
       this.svg.select("path#" + value.username)
         .datum(value.dataToPlot)
         .attr("d", d3.line()
-          .x((d: any) => this.currentXScale(d.adjustedLatitude))
-          .y((d: any) => this.currentYScale(d.adjustedLongitude))
+          .x((d: any) => this.currentXScale(d.latitude))
+          .y((d: any) => this.currentYScale(d.longitude))
         );
     }
   }

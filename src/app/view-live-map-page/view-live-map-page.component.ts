@@ -37,21 +37,17 @@ export class ViewLiveMapPageComponent implements AfterViewInit {
   private addDataPoint(awsDataPoint: AWSDataPoint): void {
     let isNewUser = false;
     const usernameNoSpaces = awsDataPoint.username.replace(/\s|\)|\(/g, "_")
-    if (!this.allUsersData[usernameNoSpaces]) { // If the user's data does not exist we will create a entry point for their data with a zero'd coordinate set
+    if (!this.allUsersData[usernameNoSpaces]) { // If the user's data does not exist we will create a entry point for their data
       isNewUser = true;
-      const initialLatitude = awsDataPoint.latitude;
-      const initialLongitude = awsDataPoint.longitude;
       const lineColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // Randomly generate a color that will be used for this user's line
 
-      this.allUsersData[usernameNoSpaces] = { initialLatitude, initialLongitude, dataToPlot: [], lineColor, username: usernameNoSpaces }
+      this.allUsersData[usernameNoSpaces] = { dataToPlot: [], lineColor, username: usernameNoSpaces }
     }
 
-    const latitudeDifferenceFromInitial = (Math.abs(this.allUsersData[usernameNoSpaces].initialLatitude) - Math.abs(awsDataPoint.latitude));
-    const longitudeDifferenceFromInitial = (Math.abs(this.allUsersData[usernameNoSpaces].initialLongitude) - Math.abs(awsDataPoint.longitude));
-    const adjustedLatitude = latitudeDifferenceFromInitial * 68.96139; // 1 degree of latitude change is 68 miles
-    const adjustedLongitude = longitudeDifferenceFromInitial * 55.11761; // 1 degree of longitude is 54 miles
+    const latitude = awsDataPoint.latitude * 68.96139; // 1 degree of latitude change is 68 miles
+    const longitude = awsDataPoint.longitude * 55.11761; // 1 degree of longitude is 54 miles
 
-    const newPlottableData: PlottableData = { adjustedLatitude, adjustedLongitude, heartRate: awsDataPoint.heartRate };
+    const newPlottableData: PlottableData = { latitude, longitude, heartRate: awsDataPoint.heartRate };
 
     this.allUsersData[usernameNoSpaces].dataToPlot.push(newPlottableData);
     if (isNewUser) {

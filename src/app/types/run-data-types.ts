@@ -6,16 +6,14 @@ export type AWSDataPoint = {
 }
 
 export type UserData = {
-    initialLatitude: number,
-    initialLongitude: number,
     lineColor: string,
     dataToPlot: PlottableData[],
     username: string
 }
 
 export type PlottableData = {
-    adjustedLatitude: number,
-    adjustedLongitude: number,
+    latitude: number,
+    longitude: number,
     heartRate: number
 }
 

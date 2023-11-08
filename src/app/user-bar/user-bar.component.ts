@@ -8,15 +8,9 @@ import { Router } from '@angular/router';
   templateUrl: './user-bar.component.html',
   styleUrls: ['./user-bar.component.css']
 })
-export class UserBarComponent implements OnInit {
+export class UserBarComponent {
   constructor(private router: Router) {}
-
-  preferredUsername = '';
   displayUserDropdown = false;
-
-  ngOnInit(): void {
-    this.preferredUsername = localStorage.getItem('preferred_username') as string;
-  }
 
   toggleUserDropdown(): void {
     this.displayUserDropdown = !this.displayUserDropdown;
