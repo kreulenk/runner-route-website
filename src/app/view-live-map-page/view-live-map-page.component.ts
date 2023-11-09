@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket';
-import { AWSDataPoint, PlottableData, UserDataCollection } from '../types/run-data-types';
+import { AWSDataPoint, PlottableData, WorkoutCollection } from '../types/run-data-types';
 import { LiveMapComponent } from '../live-map/live-map.component';
 import { ApiService } from '../api.service';
 
@@ -11,7 +11,7 @@ import { ApiService } from '../api.service';
 })
 export class ViewLiveMapPageComponent implements AfterViewInit {
   constructor(private apiService: ApiService) { }
-  public allUsersData: UserDataCollection = {};
+  public allWorkoutsData: WorkoutCollection = {};
 
   @ViewChild(LiveMapComponent)
   child: LiveMapComponent = new LiveMapComponent;
@@ -19,8 +19,15 @@ export class ViewLiveMapPageComponent implements AfterViewInit {
   private getRecentData(): void {
     this.apiService.getRecentData().subscribe({
       next: (res: any) => {
-        res.forEach((element: { latitude: any; longitude: any; username: any; heartRate: any; }) => {
-          this.addDataPoint( {latitude: element.latitude, longitude: element.longitude, username: element.username, heartRate: element.heartRate} );
+        res.forEach((element: AWSDataPoint) => {
+          this.addDataPoint( {
+            latitude: element.latitude,
+            longitude: element.longitude,
+            username: element.username.replace(/\s|\)|\(/g, "_"),
+            heartRate: element.heartRate,
+            workoutId: 'a' + element.workoutId, // add A so that the ID does not start with a number so that it can be used as an HTML id
+            timestamp: element.timestamp
+          } );
         });
       },
       error: (err: any) => console.log(err)
@@ -35,8 +42,10 @@ export class ViewLiveMapPageComponent implements AfterViewInit {
           const newDataPoint: AWSDataPoint = {
             latitude: parseFloat(heartRateData.Records[0].dynamodb.NewImage.latitude.N),
             longitude: parseFloat(heartRateData.Records[0].dynamodb.NewImage.longitude.N),
-            username: heartRateData.Records[0].dynamodb.NewImage.username.S,
-            heartRate: heartRateData.Records[0].dynamodb.NewImage.heartRate.N
+            username: heartRateData.Records[0].dynamodb.NewImage.username.S.replace(/\s|\)|\(/g, "_"),
+            heartRate: heartRateData.Records[0].dynamodb.NewImage.heartRate.N,
+            timestamp: heartRateData.Records[0].dynamodb.NewImage.timestamp.N,
+            workoutId: 'a' + heartRateData.Records[0].dynamodb.NewImage.workoutId.S // add A so that the ID does not start with a number so that it can be used as an HTML id
           }
           this.addDataPoint(newDataPoint);
         }
@@ -48,26 +57,24 @@ export class ViewLiveMapPageComponent implements AfterViewInit {
   }
 
   private addDataPoint(awsDataPoint: AWSDataPoint): void {
-    let isNewUser = false;
-    const usernameNoSpaces = awsDataPoint.username.replace(/\s|\)|\(/g, "_")
-    if (!this.allUsersData[usernameNoSpaces]) { // If the user's data does not exist we will create a entry point for their data
-      isNewUser = true;
+    let isNewWorkout = false;
+    if (!this.allWorkoutsData[awsDataPoint.workoutId]) { // If the workout's data does not exist yet, create a new entry for it
+      isNewWorkout = true;
       const lineColor = '#' + Math.floor(Math.random() * 16777215).toString(16); // Randomly generate a color that will be used for this user's line
 
-      this.allUsersData[usernameNoSpaces] = { dataToPlot: [], lineColor, username: usernameNoSpaces }
+      this.allWorkoutsData[awsDataPoint.workoutId] = { dataToPlot: [], lineColor, workoutId: awsDataPoint.workoutId, username: awsDataPoint.username }
     }
 
     const latitude = awsDataPoint.latitude * 68.96139; // 1 degree of latitude change is 68 miles
     const longitude = awsDataPoint.longitude * 55.11761; // 1 degree of longitude is 54 miles
 
-    const newPlottableData: PlottableData = { latitude, longitude, heartRate: awsDataPoint.heartRate };
+    const newPlottableData: PlottableData = { latitude, longitude, heartRate: awsDataPoint.heartRate, username: awsDataPoint.username };
 
-    this.allUsersData[usernameNoSpaces].dataToPlot.push(newPlottableData);
-    if (isNewUser) {
-      this.child.addNewUser(this.allUsersData[usernameNoSpaces])
+    this.allWorkoutsData[awsDataPoint.workoutId].dataToPlot.push(newPlottableData);
+    if (isNewWorkout) {
+      this.child.addNewWorkout(this.allWorkoutsData[awsDataPoint.workoutId])
     } else {
-      console.log(this.allUsersData[usernameNoSpaces]);
-      this.child.plotUserLines();
+      this.child.plotWorkoutLines();
     }
   }
 

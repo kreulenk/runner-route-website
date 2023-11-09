@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { UserDataCollection, UserData } from '../types/run-data-types';
+import { WorkoutCollection, WorkoutData } from '../types/run-data-types';
 import * as d3 from 'd3';
 
 @Component({
@@ -10,7 +10,7 @@ import * as d3 from 'd3';
 export class LiveMapComponent implements AfterViewInit {
 
   @Input()
-  public allUsersData: UserDataCollection = {};
+  public allWorkoutsData: WorkoutCollection = {};
 
   private svg: any;
   private originalXScale: any;
@@ -68,16 +68,16 @@ export class LiveMapComponent implements AfterViewInit {
     this.xAxis.call(d3.axisBottom(this.currentXScale))
     this.yAxis.call(d3.axisLeft(this.currentYScale))
 
-    this.plotUserLines();
+    this.plotWorkoutLines();
   }
 
-  public addNewUser(userData: UserData): void {
-    // Add the path element that will track the user
+  public addNewWorkout(workoutData: WorkoutData): void {
+    // Add the path element that will track the workout
     this.svg.append("path")
-      .datum(userData.dataToPlot)
-      .attr("id", userData.username)
+      .datum(workoutData.dataToPlot)
+      .attr("id", workoutData.workoutId)
       .attr("fill", "none")
-      .attr("stroke", userData.lineColor)
+      .attr("stroke", workoutData.lineColor)
       .attr("stroke-width", 2.5)
       .attr("d", d3.line()
         .x((d: any) => this.currentXScale(d.latitude))
@@ -96,7 +96,7 @@ export class LiveMapComponent implements AfterViewInit {
       .style("position", "fixed")
 
     const mouseover: any = () => {
-      d3.select("path#" + userData.username)
+      d3.select("path#" + workoutData.workoutId)
         .attr("stroke-width", 5)
 
       Tooltip
@@ -104,30 +104,29 @@ export class LiveMapComponent implements AfterViewInit {
     }
 
     const mousemove:any = (event: any, pathData: any) => {
-      const username = event.target.attributes.id.value;
       Tooltip
-        .html("User: " + username + "<br>Heart Rate: " + pathData[pathData.length - 1].heartRate)
+        .html("User: " + pathData[0].username + "<br>Heart Rate: " + pathData[pathData.length - 1].heartRate)
         .style("left", event.x + 5 + "px")
         .style("top", event.y + 5 +"px")
     }
 
     const mouseout: any = () => {
-      d3.select("path#" + userData.username)
+      d3.select("path#" + workoutData.workoutId)
         .attr("stroke-width", 2.5)
 
       Tooltip
         .style("opacity", 0)
     }
     
-    d3.select("path#" + userData.username)
+    d3.select("path#" + workoutData.workoutId)
       .on("mouseover", mouseover)
       .on("mousemove", mousemove)
       .on("mouseout", mouseout)
   }
 
-  public plotUserLines() {
-    for (const [key, value] of Object.entries(this.allUsersData)) {
-      this.svg.select("path#" + value.username)
+  public plotWorkoutLines() {
+    for (const [key, value] of Object.entries(this.allWorkoutsData)) {
+      this.svg.select("path#" + value.workoutId)
         .datum(value.dataToPlot)
         .attr("d", d3.line()
           .x((d: any) => this.currentXScale(d.latitude))
