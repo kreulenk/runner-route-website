@@ -28,16 +28,22 @@ export class LoginPageComponent implements OnInit {
         PASSWORD: this.password
       }
     }
-
+    
+    let accessToken: string;
     try {
       const authResponse = await UserUtils.cognitoClient.send(new InitiateAuthCommand(loginParams));
-      const accessToken = authResponse.AuthenticationResult?.AccessToken as string;
+      accessToken = authResponse.AuthenticationResult?.AccessToken as string;
       localStorage.setItem('accessToken', accessToken as string);
-
-      UserUtils.setUserInfo(accessToken);
-      this.router.navigate(['view-live-map']);
-    } catch(err) {
-      this._snackBar.open('There was an error logging in');
+    } catch(err: any) {
+      this._snackBar.open(err.message);
+      return;
     }
+
+    try {
+      UserUtils.setUserInfo(accessToken);
+    } catch(err) {
+      this._snackBar.open('There was an error fetching your user\'s information');
+    }
+    this.router.navigate(['view-live-map']);
   }
 }
