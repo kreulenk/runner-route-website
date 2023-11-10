@@ -16,8 +16,7 @@
 
 #text-info {
     text-align: center;
-    margin-top: 300px;
-
+    margin-top: 25vh;
 }
 
 #registration-fields {
@@ -25,7 +24,8 @@
     margin-right: auto;
     margin-left: auto;
     display: grid;
-    width: 600px;
+    width: 60vw;
+    max-width: 600px;
 }
 
 #display-name-field-contents {

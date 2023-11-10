@@ -42,7 +42,7 @@ export class ConfirmRegistrationComponent {
         
     try {
       await UserUtils.cognitoClient.send(new ConfirmSignUpCommand(newUserParams));
-      this._snackBar.open('You have successfully confirmed your account! Please log in to begin using TrackXC');
+      this._snackBar.open('You have successfully confirmed your account! Please log in to begin using runner route');
       this.router.navigate(['/']);
     } catch(err: any) {
       if(err?.name === 'CodeMismatchException') { // If the confirmation code does not match

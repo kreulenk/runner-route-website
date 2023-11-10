@@ -16,20 +16,20 @@
 
 #text-info {
     text-align: center;
-    margin-top: 300px;
-
+    margin-top: 25vh;
 }
 
 #login-fields {
-    margin-top: 100px;
+    margin-top: 10vh;
     margin-right: auto;
     margin-left: auto;
     display: grid;
-    width: 600px;
+    width: 60vw;
+    max-width: 600px;
 }
 
 #login-button {
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 #email-field-contents {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import UserUtils from './utils/user-utils';
 
 @Component({
@@ -8,13 +8,14 @@ import UserUtils from './utils/user-utils';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private router: Router) {}
 
   // If we load into the site on a random page, check if we are logged in
   async ngOnInit(): Promise<void> {
     // We do not need to confirm an active session on registration pages
-    const currentUrl = document.location.href;
-    if (currentUrl.includes('/confirm-registration') || currentUrl.includes('/registration')) return;
+    const currentUrlRegex = new RegExp(".*" + document.location.pathname + ".*");
+    const authUrls = ['/confirm-registration', '/registration', '/forgot-password', '/reset-password'];
+    if (authUrls.find(url => currentUrlRegex.test(url))) return;
     if (await this.isSessionActive()) return;
 
     this.router.navigate(['']);

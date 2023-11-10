@@ -15,6 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ForgotPasswordPageComponent } from './forgot-password-page/forgot-password-page.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ConfirmRegistrationComponent } from './confirm-registration/confirm-registration.component';
 import { ViewLiveMapPageComponent } from './view-live-map-page/view-live-map-page.component';
@@ -28,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
     LineChartComponent,
     LoginPageComponent,
     RegistrationPageComponent,
+    ForgotPasswordPageComponent,
     ResetPasswordComponent,
     ConfirmRegistrationComponent,
     ViewLiveMapPageComponent,
