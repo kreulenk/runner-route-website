@@ -1,7 +1,7 @@
 import { CognitoIdentityProviderClient, GetUserCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 export default class UserUtils {
-	static CLIENT_ID = '41p4agtsookev17mobo88urbt';
+	static CLIENT_ID = '19mkqou38ejqcpdb869sv04tic';
 	static cognitoClient = new CognitoIdentityProviderClient({ region: "us-east-1" });
 
 	/*

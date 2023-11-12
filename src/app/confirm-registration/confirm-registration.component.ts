@@ -17,7 +17,6 @@ export class ConfirmRegistrationComponent {
 
   constructor(private router: Router, private _snackBar: MatSnackBar) {}
 
-
   async resendConfirmationCode(): Promise<void> {
     const newUserParams = {
       ClientId: UserUtils.CLIENT_ID,
@@ -31,7 +30,6 @@ export class ConfirmRegistrationComponent {
       this._snackBar.open('There was an error resending the confirmation code');
     }
   }
-  
 
   async confirmRegistration(): Promise<void> {
     const newUserParams = {

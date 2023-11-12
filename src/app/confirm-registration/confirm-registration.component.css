@@ -24,7 +24,8 @@
     margin-right: auto;
     margin-left: auto;
     display: grid;
-    width: 600px;
+    max-width: 600px;
+    width: 90vw;
 }
 
 #display-name-field-contents {
