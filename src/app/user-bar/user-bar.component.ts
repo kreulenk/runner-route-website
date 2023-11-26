@@ -17,10 +17,10 @@ export class UserBarComponent {
   }
 
   async logoutUser(): Promise<void> {
-    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     const loginParams:any = {
       ClientId: UserUtils.CLIENT_ID,
-      Token: accessToken
+      Token: refreshToken
     }
     try {
       await UserUtils.cognitoClient.send(new RevokeTokenCommand(loginParams));

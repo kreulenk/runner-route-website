@@ -30,10 +30,13 @@ export class LoginPageComponent implements OnInit {
     }
     
     let accessToken: string;
+    let refreshToken: string;
     try {
       const authResponse = await UserUtils.cognitoClient.send(new InitiateAuthCommand(loginParams));
       accessToken = authResponse.AuthenticationResult?.AccessToken as string;
-      localStorage.setItem('accessToken', accessToken as string);
+      refreshToken = authResponse.AuthenticationResult?.RefreshToken as string;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
     } catch(err: any) {
       this._snackBar.open(err.message);
       return;
