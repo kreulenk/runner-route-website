@@ -1,27 +1,22 @@
 # Runner Route Website
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.7.
+This is an old proof of concept that I built a while back.
 
-## Development server
+The website uses an Apple Watch app and several AWS services to allow users to live stream their running/walking workouts as well as their heart rates onto a plane that would be viewable by any user of the 'runnerroute' website.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+See the example screenshot below that illustrates two users whose activities are being tracked at the same
+time.
 
-## Code scaffolding
+![screenshot.png](./docs/tracker-screenshot.png)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The red line's data is provided by Apple's GPS movement simulator for Apple Watch development. The pink
+dot at the origin's data is provided by my own physical Apple Watch as I was sitting at my desk.
 
-## Build
+## Watch App
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+The code for the Apple Watch app is within a private repository as it was fairly simple. I just forked
+an example workout watch app provided by Apple. I then added a REST call into the app that provides the watch's GPS coordinates and the user's current heart rate to a Lambda function at regular intervals.
 
-## Running unit tests
+## Future Development
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Currenttly, I have no plans to revive this project but it did serve as a fun way to explore AWS, Apple Watch development, and build a fun website that crosses into the real world.
