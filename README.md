@@ -19,4 +19,4 @@ an example workout watch app provided by Apple. I then added a REST call into th
 
 ## Future Development
 
-Currenttly, I have no plans to revive this project but it did serve as a fun way to explore AWS, Apple Watch development, and build a fun website that crosses into the real world.
+Currently, I have no plans to revive this project but it did serve as a fun way to explore AWS, Apple Watch development, and build a fun website that crosses into the real world.
